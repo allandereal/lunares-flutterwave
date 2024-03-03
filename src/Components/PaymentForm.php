@@ -5,7 +5,7 @@ namespace Lunar\Flutterwave\Components;
 use Livewire\Component;
 use Lunar\Models\Cart;
 use Lunar\Flutterwave\Facades\FlutterwaveFacade;
-use Stripe\Flutterwave;
+use Stripe\Stripe;
 
 class PaymentForm extends Component
 {
