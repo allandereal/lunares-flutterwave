@@ -10,10 +10,16 @@
       "homepage": "https://github.com/allandereal"
     }
   ],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/allandereal/lunares.git"
+    }
+  ],
   "require": {
       "php": "^8.0",
-      "allandereal/lunares": "^0.8",
-      "flutterwave/flutterwave-php": "^7.114",
+      "allandereal/lunares": "0.8.x-dev",
+      "stripe/stripe-php": "^7.114",
       "livewire/livewire": "^2.0",
       "laravel/pint": "^1.13"
   },
