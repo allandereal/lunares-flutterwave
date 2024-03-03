@@ -3,7 +3,7 @@
 namespace Lunar\Flutterwave\DataTransferObjects;
 
 use Lunar\Models\Order;
-use Flutterwave\PaymentIntent;
+use Stripe\PaymentIntent;
 
 class OrderIntent
 {

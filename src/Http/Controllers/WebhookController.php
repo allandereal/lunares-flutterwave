@@ -12,8 +12,8 @@ use Lunar\Events\PaymentAttemptEvent;
 use Lunar\Facades\Payments;
 use Lunar\Models\Cart;
 use Lunar\Flutterwave\Concerns\ConstructsWebhookEvent;
-use Flutterwave\Exception\SignatureVerificationException;
-use Flutterwave\Exception\UnexpectedValueException;
+use Stripe\Exception\SignatureVerificationException;
+use Stripe\Exception\UnexpectedValueException;
 
 final class WebhookController extends Controller
 {

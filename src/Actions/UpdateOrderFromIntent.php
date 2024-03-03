@@ -5,7 +5,7 @@ namespace Lunar\Flutterwave\Actions;
 use Illuminate\Support\Facades\DB;
 use Lunar\Models\Order;
 use Lunar\Flutterwave\Facades\FlutterwaveFacade;
-use Flutterwave\PaymentIntent;
+use Stripe\PaymentIntent;
 
 class UpdateOrderFromIntent
 {

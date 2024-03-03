@@ -4,11 +4,11 @@ namespace Lunar\Flutterwave\Managers;
 
 use Illuminate\Support\Collection;
 use Lunar\Models\Cart;
-use Flutterwave\Charge;
-use Flutterwave\Exception\InvalidRequestException;
-use Flutterwave\PaymentIntent;
-use Flutterwave\Flutterwave;
-use Flutterwave\FlutterwaveClient;
+use Stripe\Charge;
+use Stripe\Exception\InvalidRequestException;
+use Stripe\PaymentIntent;
+use Stripe\Stripe;
+use Stripe\StripeClient;
 
 class FlutterwaveManager
 {

@@ -3,7 +3,7 @@
 namespace Lunar\Flutterwave\Actions;
 
 use Lunar\Flutterwave\Concerns\ConstructsWebhookEvent;
-use Flutterwave\Webhook;
+use Stripe\Webhook;
 
 class ConstructWebhookEvent implements ConstructsWebhookEvent
 {

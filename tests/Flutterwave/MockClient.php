@@ -4,7 +4,7 @@ namespace Lunar\Flutterwave\Tests\Flutterwave;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Flutterwave\HttpClient\ClientInterface;
+use Stripe\HttpClient\ClientInterface;
 
 class MockClient implements ClientInterface
 {

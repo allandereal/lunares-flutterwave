@@ -10,9 +10,9 @@ use Lunar\Models\Transaction;
 use Lunar\PaymentTypes\AbstractPayment;
 use Lunar\Flutterwave\Actions\UpdateOrderFromIntent;
 use Lunar\Flutterwave\Facades\FlutterwaveFacade;
-use Flutterwave\Exception\InvalidRequestException;
-use Flutterwave\PaymentIntent;
-use Flutterwave\Flutterwave;
+use Stripe\Exception\InvalidRequestException;
+use Stripe\PaymentIntent;
+use Stripe\Stripe;
 
 class FlutterwavePaymentType extends AbstractPayment
 {

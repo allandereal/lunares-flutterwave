@@ -5,8 +5,8 @@ namespace Lunar\Flutterwave\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Lunar\Flutterwave\Concerns\ConstructsWebhookEvent;
-use Flutterwave\Exception\SignatureVerificationException;
-use Flutterwave\Exception\UnexpectedValueException;
+use Stripe\Exception\SignatureVerificationException;
+use Stripe\Exception\UnexpectedValueException;
 
 class FlutterwaveWebhookMiddleware
 {

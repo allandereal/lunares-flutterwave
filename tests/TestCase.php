@@ -13,7 +13,7 @@ use Lunar\Tests\Stubs\User;
 use Spatie\Activitylog\ActivitylogServiceProvider;
 use Spatie\LaravelBlink\BlinkServiceProvider;
 use Spatie\MediaLibrary\MediaLibraryServiceProvider;
-use Flutterwave\ApiRequestor;
+use Stripe\ApiRequestor;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
