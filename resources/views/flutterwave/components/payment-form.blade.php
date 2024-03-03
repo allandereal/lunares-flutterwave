@@ -8,40 +8,41 @@
     this.processing = true
     this.error = null
 
-{{--    address = {--}}
-{{--      city: '{{ addslashes($this->billing->city) }}',--}}
-{{--      country: '{{ addslashes($this->billing->country->iso2) }}',--}}
-{{--      line1: '{{ addslashes($this->billing->line_one) }}',--}}
-{{--      line2: '{{ addslashes($this->billing->line_two) }}',--}}
-{{--      postal_code: '{{ addslashes($this->billing->postcode) }}',--}}
-{{--      state: '{{ addslashes($this->billing->state) }}',--}}
-{{--    }--}}
+    address = {
+      city: '{{ addslashes($this->billing->city) }}',
+      country: '{{ addslashes($this->billing->country->iso2) }}',
+      line1: '{{ addslashes($this->billing->line_one) }}',
+      line2: '{{ addslashes($this->billing->line_two) }}',
+      postal_code: '{{ addslashes($this->billing->postcode) }}',
+      state: '{{ addslashes($this->billing->state) }}',
+    }
 
     FlutterwaveCheckout({
       public_key: '{{ config('services.flutterwave.public_key') }}',
-      tx_ref: 'txref-DI0NzMx13',
-      amount: 2500,
-      currency: 'NGN',
-      payment_options: 'card, banktransfer, ussd',
+      tx_ref: 'txref-{{ \Illuminate\Support\Str::random(9).time() }}',
+      amount: {{ $this->cart->total }},
+      currency: '{{ $this->cart->currency->code }}',
+      payment_options: 'mobilemoneyuganda, card, mpesa, banktransfer, ussd',
+      redirect_url: '{{ $returnUrl ?: url()->current() }}',
       meta: {
-      source: 'docs-inline-test',
-      consumer_mac: '92a3-912ba-1192a',
+        source: 'docs-inline-test',
+        consumer_mac: '92a3-912ba-1192a',
       },
       customer: {
-      email: 'test@mailinator.com',
-      phone_number: '08100000000',
-      name: 'Ayomide Jimi-Oni',
+        email: '{{ $this->billing->contact_email }}',
+        phone_number: '{{ $this->billing->contact_phone }}',
+        name: '{{ $this->billing->first_name }} {{ $this->billing->last_name }}',
       },
       customizations: {
-      title: 'Flutterwave Developers',
-      description: 'Test Payment',
-      logo: 'https://checkout.flutterwave.com/assets/img/rave-logo.png',
+        title: 'Beisome Store',
+        description: 'Checkout at Beisome Store',
+        logo: 'https://checkout.flutterwave.com/assets/img/rave-logo.png',
       },
       callback: function (data){
-      console.log('payment callback:', data);
+        console.log('payment callback:', data);
       },
       onclose: function() {
-      console.log('Payment cancelled!');
+        console.log('Payment cancelled!');
       }
     });
 

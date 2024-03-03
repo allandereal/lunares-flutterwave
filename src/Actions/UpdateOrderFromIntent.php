@@ -3,8 +3,8 @@
 namespace Lunar\Flutterwave\Actions;
 
 use Illuminate\Support\Facades\DB;
-use Lunar\Models\Order;
 use Lunar\Flutterwave\Facades\FlutterwaveFacade;
+use Lunar\Models\Order;
 use Stripe\PaymentIntent;
 
 class UpdateOrderFromIntent
@@ -30,7 +30,7 @@ class UpdateOrderFromIntent
                 $placedAt = now();
             }
 
-            if ($charges->isEmpty() && !$requiresCapture) {
+            if ($charges->isEmpty() && ! $requiresCapture) {
                 return $order;
             }
 

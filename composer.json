@@ -21,7 +21,8 @@
       "allandereal/lunares": "0.8.x-dev",
       "stripe/stripe-php": "^7.114",
       "livewire/livewire": "^2.0",
-      "laravel/pint": "^1.13"
+      "laravel/pint": "^1.13",
+    "flutterwavedev/flutterwave-v3": "^1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5",

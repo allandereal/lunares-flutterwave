@@ -3,52 +3,48 @@
 namespace Lunar\Flutterwave\Managers;
 
 use Illuminate\Support\Collection;
+use Lunar\Flutterwave\Rave\FlutterwaveClient;
+use Lunar\Flutterwave\Rave\FlutterwaveTransaction;
 use Lunar\Models\Cart;
-use Stripe\Charge;
 use Stripe\Exception\InvalidRequestException;
-use Stripe\PaymentIntent;
-use Stripe\Stripe;
-use Stripe\StripeClient;
 
 class FlutterwaveManager
 {
     public function __construct()
     {
-        Stripe::setApiKey(config('services.flutterwave.key'));
+        //
     }
 
     /**
      * Return the Flutterwave client
      */
-    public function getClient(): StripeClient
+    public function getClient(): FlutterwaveClient
     {
-        return new StripeClient(
-            config('services.flutterwave.key')
+        return new FlutterwaveClient(
+            //config('services.flutterwave.key')
         );
     }
 
     /**
-     * Create a payment intent from a Cart
-     *
-     * @return \Stripe\PaymentIntent
+     * Create a payment transaction from a Cart
      */
-    public function createIntent(Cart $cart)
+    public function createTransaction(Cart $cart): FlutterwaveTransaction
     {
         $shipping = $cart->shippingAddress;
 
         $meta = (array) $cart->meta;
 
-        if ($meta && ! empty($meta['payment_intent'])) {
-            $intent = $this->fetchIntent(
-                $meta['payment_intent']
+        if ($meta && ! empty($meta['transaction_id'])) {
+            $transaction = $this->fetchTransaction(
+                $meta['transaction_id']
             );
 
-            if ($intent) {
-                return $intent;
+            if ($transaction) {
+                return $transaction;
             }
         }
 
-        $paymentIntent = $this->buildIntent(
+        $transaction = $this->buildTransaction(
             $cart->total->value,
             $cart->currency->code,
             $shipping,
@@ -57,57 +53,57 @@ class FlutterwaveManager
         if (! $meta) {
             $cart->update([
                 'meta' => [
-                    'payment_intent' => $paymentIntent->id,
+                    'transaction_id' => $transaction->id,
                 ],
             ]);
         } else {
-            $meta['payment_intent'] = $paymentIntent->id;
+            $meta['transaction_id'] = $transaction->id;
             $cart->meta = $meta;
             $cart->save();
         }
 
-        return $paymentIntent;
+        return $transaction;
     }
 
-    public function syncIntent(Cart $cart)
+    public function syncTransaction(Cart $cart)
     {
         $meta = (array) $cart->meta;
 
-        if (empty($meta['payment_intent'])) {
+        if (empty($meta['transaction_id'])) {
             return;
         }
 
         $cart = $cart->calculate();
 
-        $this->getClient()->paymentIntents->update(
-            $meta['payment_intent'],
+        $this->getClient()->transactions->update(
+            $meta['transaction_id'],
             ['amount' => $cart->total->value]
         );
     }
 
     /**
-     * Fetch an intent from the Flutterwave API.
+     * Fetch a transaction from the Flutterwave API.
      *
-     * @param  string  $intentId
-     * @return null|\Stripe\PaymentIntent
+     * @param  string  $transactionId
+     * @return null|FlutterwaveTransaction
      */
-    public function fetchIntent($intentId)
+    public function fetchTransaction($transactionId)
     {
         try {
-            $intent = PaymentIntent::retrieve($intentId);
+            $transaction = FlutterwaveTransaction::retrieve($transactionId);
         } catch (InvalidRequestException $e) {
             return null;
         }
 
-        return $intent;
+        return $transaction;
     }
 
-    public function getCharges(string $paymentIntentId): Collection
+    public function getCharges(string $transactionId): Collection
     {
         try {
             return collect(
                 $this->getClient()->charges->all([
-                    'payment_intent' => $paymentIntentId,
+                    'transaction_id' => $transactionId,
                 ])['data'] ?? null
             );
         } catch (\Exception $e) {
@@ -123,16 +119,15 @@ class FlutterwaveManager
     }
 
     /**
-     * Build the intent
+     * Build the transaction
      *
      * @param  int  $value
      * @param  string  $currencyCode
      * @param  \Lunar\Models\CartAddress  $shipping
-     * @return \Stripe\PaymentIntent
      */
-    protected function buildIntent($value, $currencyCode, $shipping)
+    protected function buildTransaction($value, $currencyCode, $shipping): FlutterwaveTransaction
     {
-        return PaymentIntent::create([
+        return FlutterwaveTransaction::create([
             'amount' => $value,
             'currency' => $currencyCode,
             'automatic_payment_methods' => ['enabled' => true],
