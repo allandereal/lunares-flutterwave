@@ -8,51 +8,79 @@
     this.processing = true
     this.error = null
 
-    address = {
-      city: '{{ addslashes($this->billing->city) }}',
-      country: '{{ addslashes($this->billing->country->iso2) }}',
-      line1: '{{ addslashes($this->billing->line_one) }}',
-      line2: '{{ addslashes($this->billing->line_two) }}',
-      postal_code: '{{ addslashes($this->billing->postcode) }}',
-      state: '{{ addslashes($this->billing->state) }}',
-    }
+{{--    address = {--}}
+{{--      city: '{{ addslashes($this->billing->city) }}',--}}
+{{--      country: '{{ addslashes($this->billing->country->iso2) }}',--}}
+{{--      line1: '{{ addslashes($this->billing->line_one) }}',--}}
+{{--      line2: '{{ addslashes($this->billing->line_two) }}',--}}
+{{--      postal_code: '{{ addslashes($this->billing->postcode) }}',--}}
+{{--      state: '{{ addslashes($this->billing->state) }}',--}}
+{{--    }--}}
 
-    this.flutterwave.confirmPayment({
-        elements,
-        confirmParams: {
-          // Make sure to change this to your payment completion page
-          return_url: '{{ $returnUrl ?: url()->current() }}',
-          payment_method_data: {
-            billing_details: {
-              name: '{{ $this->billing->first_name }} {{ $this->billing->last_name }}',
-              email: '{{ $this->billing->contact_email }}',
-              phone: '{{ $this->billing->contact_phone }}',
-              address
-            }
-          }
-        },
-      }).then(result => {
-        if (result.error) {
-          this.error = result.error.message
-          this.processing = false
-        }
-      }).catch(error => {
-        this.processing = false
-      })
-  },
-  init() {
-    this.flutterwave = Flutterwave('{{ config('services.flutterwave.public_key')}}');
-
-    elements = this.flutterwave.elements({
-      clientSecret: '{{ $this->clientSecret }}'
-    });
-
-    this.paymentElement = elements.create('payment', {
-      fields: {
-        billingDetails: 'never'
+    FlutterwaveCheckout({
+      public_key: '{{ config('services.flutterwave.public_key') }}',
+      tx_ref: 'txref-DI0NzMx13',
+      amount: 2500,
+      currency: 'NGN',
+      payment_options: 'card, banktransfer, ussd',
+      meta: {
+      source: 'docs-inline-test',
+      consumer_mac: '92a3-912ba-1192a',
+      },
+      customer: {
+      email: 'test@mailinator.com',
+      phone_number: '08100000000',
+      name: 'Ayomide Jimi-Oni',
+      },
+      customizations: {
+      title: 'Flutterwave Developers',
+      description: 'Test Payment',
+      logo: 'https://checkout.flutterwave.com/assets/img/rave-logo.png',
+      },
+      callback: function (data){
+      console.log('payment callback:', data);
+      },
+      onclose: function() {
+      console.log('Payment cancelled!');
       }
     });
-    this.paymentElement.mount(this.$refs.paymentElement);
+
+{{--    this.flutterwave.confirmPayment({--}}
+{{--        elements,--}}
+{{--        confirmParams: {--}}
+{{--          // Make sure to change this to your payment completion page--}}
+{{--          return_url: '{{ $returnUrl ?: url()->current() }}',--}}
+{{--          payment_method_data: {--}}
+{{--            billing_details: {--}}
+{{--              name: '{{ $this->billing->first_name }} {{ $this->billing->last_name }}',--}}
+{{--              email: '{{ $this->billing->contact_email }}',--}}
+{{--              phone: '{{ $this->billing->contact_phone }}',--}}
+{{--              address--}}
+{{--            }--}}
+{{--          }--}}
+{{--        },--}}
+{{--      }).then(result => {--}}
+{{--        if (result.error) {--}}
+{{--          this.error = result.error.message--}}
+{{--          this.processing = false--}}
+{{--        }--}}
+{{--      }).catch(error => {--}}
+{{--        this.processing = false--}}
+{{--      })--}}
+  },
+  init() {
+{{--    this.flutterwave = Flutterwave('{{ config('services.flutterwave.public_key')}}');--}}
+
+{{--    elements = this.flutterwave.elements({--}}
+{{--      clientSecret: '{{ $this->clientSecret }}'--}}
+{{--    });--}}
+
+{{--    this.paymentElement = elements.create('payment', {--}}
+{{--      fields: {--}}
+{{--        billingDetails: 'never'--}}
+{{--      }--}}
+{{--    });--}}
+{{--    this.paymentElement.mount(this.$refs.paymentElement);--}}
   }
 }">
   <!-- Display a payment form -->
