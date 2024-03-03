@@ -8,7 +8,7 @@ it('can handle valid event', function () {
         {
             public function constructEvent(string $jsonPayload, string $signature, string $secret)
             {
-                return \Flutterwave\Event::constructFrom([]);
+                return \Stripe\Event::constructFrom([]);
             }
         };
     });

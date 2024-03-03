@@ -14,15 +14,15 @@ class FlutterwaveManager
 {
     public function __construct()
     {
-        Flutterwave::setApiKey(config('services.flutterwave.key'));
+        Stripe::setApiKey(config('services.flutterwave.key'));
     }
 
     /**
      * Return the Flutterwave client
      */
-    public function getClient(): FlutterwaveClient
+    public function getClient(): StripeClient
     {
-        return new FlutterwaveClient(
+        return new StripeClient(
             config('services.flutterwave.key')
         );
     }
@@ -30,7 +30,7 @@ class FlutterwaveManager
     /**
      * Create a payment intent from a Cart
      *
-     * @return \Flutterwave\PaymentIntent
+     * @return \Stripe\PaymentIntent
      */
     public function createIntent(Cart $cart)
     {
@@ -89,7 +89,7 @@ class FlutterwaveManager
      * Fetch an intent from the Flutterwave API.
      *
      * @param  string  $intentId
-     * @return null|\Flutterwave\PaymentIntent
+     * @return null|\Stripe\PaymentIntent
      */
     public function fetchIntent($intentId)
     {
@@ -128,7 +128,7 @@ class FlutterwaveManager
      * @param  int  $value
      * @param  string  $currencyCode
      * @param  \Lunar\Models\CartAddress  $shipping
-     * @return \Flutterwave\PaymentIntent
+     * @return \Stripe\PaymentIntent
      */
     protected function buildIntent($value, $currencyCode, $shipping)
     {

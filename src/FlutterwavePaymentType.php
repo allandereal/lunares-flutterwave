@@ -19,7 +19,7 @@ class FlutterwavePaymentType extends AbstractPayment
     /**
      * The Flutterwave instance.
      *
-     * @var \Flutterwave\FlutterwaveClient
+     * @var \Stripe\StripeClient
      */
     protected $flutterwave;
 
