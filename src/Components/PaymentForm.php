@@ -42,7 +42,7 @@ class PaymentForm extends Component
      */
     public function mount()
     {
-        Flutterwave::setApiKey(config('services.flutterwave.key'));
+        Stripe::setApiKey(config('services.flutterwave.key'));
         $this->policy = config('flutterwave.policy', 'capture');
     }
 
